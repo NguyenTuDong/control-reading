@@ -28,7 +28,12 @@
 </template>
 
 <script>
-export default {}
+export default {
+  async asyncData({ $axios }) {
+    let data = await $axios.get("/api/novels");
+    return { novels: data.data };
+  },
+}
 </script>
 
 <style>
