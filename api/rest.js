@@ -6,21 +6,42 @@ app.use(bodyParser.json())
 app.get("/all", (req, res) => {
   res.json(data)
 })
-app.get('/novels', (req, res) => {
-  let result = Object.values(data.novels).map((novel) => {
+app.get('/books', (req, res) => {
+  let result = Object.values(data.books).map((novel) => {
     let { chapters, ...filter } = novel;
     return filter;
   })
   res.json(result)
 })
-app.get('/novels/:novelId', (req, res) => {
-  res.json(data.novels[req.params.novelId])
+app.get('/books/:bookId', (req, res) => {
+  res.json(data.books[req.params.bookId])
 })
-app.get('/novels/:novelId/chapters', (req, res) => {
-  res.json(Object.values(data.novels[req.params.novelId].chapters))
+app.get('/books/:bookId/chapters', (req, res) => {
+  let result = Object.values(data.books[req.params.bookId].chapters).map((chapter) => {
+    let { body, ...x } = chapter;
+    return x;
+  })
+  res.json(result)
 })
-app.get('/novels/:novelId/chapters/:chapterId', (req, res) => {
-  res.json(data.novels[req.params.novelId].chapters[req.params.chapterId])
+app.get('/books/:bookId/chapters/:chapterId', (req, res) => {
+  let { bookId, chapterId } = req.params;
+  let book = data.books[bookId];
+  let chapter = book.chapters[chapterId];
+  let prev = "";
+  let next = "";
+  if (chapterId > 1) {
+    prev = `/books/${bookId}/${parseInt(chapterId) - 1}`
+  }
+  if (chapterId < Object.keys(book.chapters).length) {
+    next = `/books/${bookId}/${parseInt(chapterId) + 1}`
+  }
+  let result = {
+    bookTitle: book.title,
+    prev,
+    next,
+    ...chapter,
+  }
+  res.json(result)
 })
 
 module.exports = app
