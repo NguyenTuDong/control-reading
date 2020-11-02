@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
@@ -27,7 +29,7 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
-  buildModules: [],
+  buildModules: ['@nuxtjs/dotenv'],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: ['@nuxtjs/axios'],
@@ -40,8 +42,7 @@ export default {
     { path: '/api', handler: '~/api/rest.js' },
   ],
 
-  axios: {
-    // extra config e.g
-    BaseURL: process.env.BASE_URL || 'http://localhost:3000/',
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
   },
 }

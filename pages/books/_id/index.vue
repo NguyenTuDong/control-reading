@@ -37,11 +37,16 @@
 </template>
 
 <script>
+import axios from '~/plugins/axios'
 export default {
-  async asyncData({ $axios, route }) {
-    console.log(route);
-    let data = await $axios.get(`/api/books/${route.params.id}`);
-    return { book: data.data };
+  async asyncData({ route }) {
+    try {
+      let data = await axios.get(`/api/books/${route.params.id}`);
+      return { book: data.data };
+    } catch (error) {
+      console.log(error);
+      return { book: {} };
+    }
   },
 }
 </script>

@@ -43,17 +43,25 @@
 </template>
 
 <script>
+import axios from '~/plugins/axios'
 import * as tf from '@tensorflow/tfjs'
 import * as tmPose from '@teachablemachine/pose'
 import modelJSON from '~/data/model.json'
 import metadataJSON from '~/data/metadata.json'
 
+const URL = "https://teachablemachine.withgoogle.com/models/2-TLkuF-X/";
+
 export default {
-  async asyncData({ $axios, route }) {
-    let chapter = await $axios.get(
-      `/api/books/${route.params.id}/chapters/${route.params.chapterId}`
-    )
-    return { chapter: chapter.data }
+  async asyncData({ route }) {
+    try {
+      let chapter = await axios.get(
+        `/api/books/${route.params.id}/chapters/${route.params.chapterId}`
+      )
+      return { chapter: chapter.data }
+    } catch (error) {
+      console.log(error);
+      return { chapter: {} }
+    }
   },
   data() {
     return {
@@ -86,13 +94,13 @@ export default {
       //   }
       // })
       // const URL = "https://teachablemachine.withgoogle.com/models/2-TLkuF-X/";
-      // const modelURL = URL + "model.json";
-      // const metadataURL = URL + "metadata.json";
+      const modelURL = URL + "model.json";
+      const metadataURL = URL + "metadata.json";
       let self = this;
       // load the model and metadata
       // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
       // Note: the pose library adds a tmPose object to your window (window.tmPose)
-      this.model = await tmPose.load(modelJSON, metadataJSON)
+      this.model = await tmPose.load(modelURL, metadataURL)
       console.log(this.model);
       this.maxPredictions = this.model.getTotalClasses()
 

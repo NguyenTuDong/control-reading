@@ -28,10 +28,16 @@
 </template>
 
 <script>
+import axios from '~/plugins/axios'
 export default {
-  async asyncData({ $axios }) {
-    let data = await $axios.get("/api/books");
-    return { books: data.data };
+  async asyncData() {
+    try {
+      let data = await axios.get("/api/books");
+      return { books: data.data };
+    } catch (error) {
+      console.log(error);
+      return { books: [] };
+    }
   },
 }
 </script>
