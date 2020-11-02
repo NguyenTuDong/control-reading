@@ -18,6 +18,7 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
   color: #263D57;
+  scroll-behavior: smooth;
 }
 
 *,
@@ -37,6 +38,26 @@ a {
 ul, ol {
   list-style: none;
   padding: 0;
+}
+body {
+  position: relative;
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transition: 1000ms ease-in-out;
+    z-index: 9999;
+  }
+  &.hide {
+    &::before {
+      background-color: black;
+    }
+  }
 }
 .l-container {
   max-width: 1200px;

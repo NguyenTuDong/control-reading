@@ -36,8 +36,6 @@
           </div>
         </div>
       </div>
-      <div><canvas id="canvas"></canvas></div>
-      <div id="label-container"></div>
     </div>
   </main>
 </template>
@@ -67,8 +65,6 @@ export default {
     return {
       model: null,
       webcam: null,
-      ctx: null,
-      labelContainer: null,
       maxPredictions: null,
     }
   },
@@ -77,23 +73,6 @@ export default {
   },
   methods: {
     async init() {
-      // let modelURL = await this.$axios({
-      //   method: 'GET',
-      //   url: `https://cors-anywhere.herokuapp.com/https://teachablemachine.withgoogle.com/models/2-TLkuF-X/model.json`,
-      //   headers: {
-      //     'Access-Control-Allow-Origin': '*',
-      //     'Content-type': 'application/json',
-      //   }
-      // })
-      // let metadataURL = await this.$axios({
-      //   method: 'GET',
-      //   url: `https://cors-anywhere.herokuapp.com/https://teachablemachine.withgoogle.com/models/2-TLkuF-X/metadata.json`,
-      //   headers: {
-      //     'Access-Control-Allow-Origin': '*',
-      //     'Content-type': 'application/json',
-      //   }
-      // })
-      // const URL = "https://teachablemachine.withgoogle.com/models/2-TLkuF-X/";
       const modelURL = URL + "model.json";
       const metadataURL = URL + "metadata.json";
       let self = this;
@@ -101,7 +80,6 @@ export default {
       // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
       // Note: the pose library adds a tmPose object to your window (window.tmPose)
       this.model = await tmPose.load(modelURL, metadataURL)
-      console.log(this.model);
       this.maxPredictions = this.model.getTotalClasses()
 
       // Convenience function to setup a webcam
@@ -111,17 +89,6 @@ export default {
       await this.webcam.setup() // request access to the webcam
       await this.webcam.play()
       window.requestAnimationFrame(self.loop)
-
-      // append/get elements to the DOM
-      const canvas = document.getElementById('canvas')
-      canvas.width = size
-      canvas.height = size
-      this.ctx = canvas.getContext('2d')
-      this.labelContainer = document.getElementById('label-container')
-      for (let i = 0; i < this.maxPredictions; i++) {
-        // and class labels
-        this.labelContainer.appendChild(document.createElement('div'))
-      }
     },
     async loop(timestamp) {
       this.webcam.update() // update the webcam frame
@@ -130,31 +97,26 @@ export default {
     },
     async predict() {
       let self = this;
+      let className = '';
       // Prediction #1: run input through posenet
       // estimatePose can take in an image, video or canvas html element
       const { pose, posenetOutput } = await self.model.estimatePose(self.webcam.canvas)
       // Prediction 2: run input through teachable machine classification model
-      const prediction = await self.model.predict(posenetOutput)
+      const prediction = await self.model.predictTopK(posenetOutput, 1)
+      className = prediction[0].className;
 
-      for (let i = 0; i < self.maxPredictions; i++) {
-        const classPrediction =
-          prediction[i].className + ': ' + prediction[i].probability.toFixed(2)
-        self.labelContainer.childNodes[i].innerHTML = classPrediction
+      if (className == 'NotLook') {
+        document.body.classList.add('hide');
+      } else {
+        document.body.classList.remove('hide');
       }
 
-      // finally draw the poses
-      self.drawPose(pose)
-    },
-    drawPose(pose) {
-      let self = this;
-      if (self.webcam.canvas) {
-        self.ctx.drawImage(self.webcam.canvas, 0, 0)
-        // draw the keypoints and skeleton
-        if (pose) {
-          const minPartConfidence = 0.5
-          tmPose.drawKeypoints(pose.keypoints, minPartConfidence, self.ctx)
-          tmPose.drawSkeleton(pose.keypoints, minPartConfidence, self.ctx)
-        }
+      if (className == 'LookUp' && window.scrollY > 3) {
+        window.scroll(0, window.scrollY - 3);
+      }
+
+      if (className == 'LookDown') {
+        window.scroll(0, window.scrollY + 3);
       }
     },
   },
