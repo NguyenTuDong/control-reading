@@ -7,8 +7,10 @@
         </div>
         <div class="c-book__body">
           <div class="c-book__left">
-            <div class="c-book__thumbnail">
-              <img :src="book.thumbnail" alt="">
+            <div class="c-book__thumbnail-container">
+              <div class="c-book__thumbnail">
+                <img :src="book.thumbnail" alt="">
+              </div>
             </div>
             <p>
               <b>Tác giả:</b> {{ book.author }}
@@ -63,16 +65,39 @@ export default {
   &__title {
     font-size: 40px;
     text-align: center;
+    @media only screen and (max-width: 450px) {
+      font-size: 30px;
+    }
   }
   &__body {
     display: flex;
+    @media only screen and (max-width: 812px) {
+      display: block;
+    }
   }
   &__left {
     flex: 0 0 250px;
+    max-width: 250px;
+    @media only screen and (max-width: 812px) {
+      max-width: 100%;
+      margin-bottom: 30px;
+    }
   }
   &__right {
     flex: 1;
     padding-left: 50px;
+    @media only screen and (max-width: 812px) {
+      padding-left: 0;
+    }
+  }
+  &__thumbnail-container {
+    @media only screen and (max-width: 812px) {
+      width: 300px;
+      margin: 0 auto;
+    }
+    @media only screen and (max-width: 450px) {
+      width: 200px;
+    }
   }
   &__thumbnail {
     position: relative;
@@ -106,11 +131,17 @@ export default {
       height: 2px;
       background-color: #86929F;
     }
+    @media only screen and (max-width: 450px) {
+      font-size: 26px;
+    }
   }
   &__list {
     li {
       font-size: 20px;
       margin-bottom: 20px;
+      @media only screen and (max-width: 450px) {
+        font-size: 18px;
+      }
     }
   }
 }

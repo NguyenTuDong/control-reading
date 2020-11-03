@@ -29,9 +29,15 @@ export default {
   }
   &__logo {
     font-size: 30px;
+    @media only screen and (max-width: 450px) {
+      font-size: 20px;
+    }
   }
   &__copy {
     font-size: 12px;
+  }
+  @media only screen and (max-width: 450px) {
+    padding: 30px 0;
   }
 }
 </style>

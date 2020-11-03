@@ -18,7 +18,6 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
   color: #263D57;
-  scroll-behavior: smooth;
 }
 
 *,
@@ -50,7 +49,7 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    transition: 1000ms ease-in-out;
+    transition: 500ms ease-in-out;
     z-index: 9999;
   }
   &.hide {
@@ -63,6 +62,9 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 50px;
+  @media only screen and (max-width: 450px) {
+    padding: 0 20px;
+  }
 }
 .u-primary-color {
   color: #EE434C;

@@ -72,6 +72,14 @@ export default {
     flex: 0 0 20%;
     max-width: 20%;
     padding: 0 10px;
+    @media only screen and (max-width: 812px) {
+      flex: 0 0 33.33%;
+      max-width: 33.33%;
+    }
+    @media only screen and (max-width: 450px) {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
   }
 }
 .c-card {

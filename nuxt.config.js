@@ -16,7 +16,20 @@ export default {
         href:
           'https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&display=swap',
       },
+      {
+        rel: 'stylesheet',
+        href:
+          'https://use.fontawesome.com/releases/v5.15.1/css/all.css',
+        integrity: 'sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp',
+        crossorigin: 'anonymous'
+      },
     ],
+    script: [
+      {
+        src: "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js",
+        type: "text/javascript"
+      },
+    ]
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
